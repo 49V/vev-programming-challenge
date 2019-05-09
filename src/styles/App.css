@@ -1,0 +1,15 @@
+.body {
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.problem {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.problem .description {
+  max-width: 500px;
+}
