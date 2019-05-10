@@ -1,15 +1,36 @@
 .body {
   background: white;
+  min-height: 100vh;
+}
+
+.circle {
+  width: 150px;
+  height: 150px;
+  align-items: center;
+  border-radius: 50%;
+  background: #ff705a;
+  color: #f5efed;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .problem {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+  background: #001733;
+  color: #f5efed;
+  padding: 15px;
+  margin-bottom: 75px;
 }
 
 .problem .description {
   max-width: 500px;
+}
+
+#root {
+  align-items: center;
+  box-sizing: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100vh;
 }
