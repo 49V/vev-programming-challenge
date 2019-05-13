@@ -2,9 +2,10 @@ import React from 'react';
 import './styles/App.css';
 
 import Circle from './components/Circle';
+import Line from './components/Line';
 
 export interface Props {
-
+  circleRadius: number;
 }
 
 export interface State {
@@ -58,7 +59,7 @@ class App extends React.Component<Props, State> {
   }
 
   /*
-  * Function that sets the state of currentDraggableComponent to null when the left mouse button is released
+  * Sets the state of currentDraggableComponent to null when the left mouse button is released
   */
   clearSelectedComponent = () : void => {
     this.setState({
@@ -66,8 +67,8 @@ class App extends React.Component<Props, State> {
     });
   }
 
-   /*
-  * Function that sets an element with a given ID to be draggable
+  /*
+  * Sets an element with a given ID to be draggable
   */
   setDraggable = (id: string): void => {
     const element: any = document.getElementById(id);
@@ -83,10 +84,11 @@ class App extends React.Component<Props, State> {
   }
 
   /*
-  * Function that changes the position of an element as it is dragged
+  * Changes the position of an element as it is dragged
   */
  updateDraggedComponent = (event: any): void => {
 
+  // If we don't have an element selected, just return
   if(this.state.currentDraggableComponent === null) {
     return;
   } 
@@ -135,7 +137,7 @@ class App extends React.Component<Props, State> {
     return(
       <>
         {circles}
-
+        <Line circleRadius={this.props.circleRadius} coordinates={this.state.coordinates} />
         <section className="problem">
           <h1>
             Problem description

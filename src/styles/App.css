@@ -28,6 +28,13 @@
   width: 60px;
 }
 
+.line {
+  min-width: 100vw;
+  min-height: 100vh;
+  stroke: #001733;
+  stroke-width: 2;
+}
+
 .problem {
   background: #001733;
   color: #f5efed;
