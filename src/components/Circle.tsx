@@ -24,10 +24,12 @@ class Circle extends React.Component<IProps, IState> {
     event.preventDefault();
     let newCoordinates;
 
-    if(this.isNumeric(event.target.value)) {
+    const convertedInput = parseFloat(event.target.value);
+
+    if(this.isNumeric(convertedInput)) {
       if(event.target.id === 'x') {
         // Case 1: We update x
-        const newX = event.target.value;
+        const newX = convertedInput;
         newCoordinates = {
           x: newX,
           y: this.props.y
@@ -35,7 +37,7 @@ class Circle extends React.Component<IProps, IState> {
 
       } else if(event.target.id === 'y') {
         // Case 2: We update y
-        const newY = event.target.value;
+        const newY = convertedInput;
         newCoordinates = {
           x: this.props.x,
           y: newY
@@ -55,14 +57,12 @@ class Circle extends React.Component<IProps, IState> {
     return(
       <div className="circle" id={`circle-${this.props.id}`} style={{left: this.props.x + 'px', top: this.props.y + 'px'}}>
         <span className="text">
-          <form onChange={this.updatePosition}>
             <label>
-              X : <input id="x" type="number" name="x" defaultValue={`${this.props.x}`} />
+              X : <input id="x" type="number" name="x" onChange={this.updatePosition} value={`${this.props.x}`} />
             </label>
             <label>
-              Y : <input id="y" type="number" name="y" defaultValue={`${this.props.y}`} />
+              Y : <input id="y" type="number" name="y" onChange={this.updatePosition} value={`${this.props.y}`} />
             </label>
-          </form>
         </span>
       </div>
     );

@@ -11,6 +11,7 @@ export interface State {
   // Create an array of objects for holding our coordinates
   coordinates: { x: number, y: number} [];
   currentDraggableComponent: any;
+  referenceCoordinates: {x: number, y: number};
 }
 
 class App extends React.Component<Props, State> {
@@ -25,12 +26,14 @@ class App extends React.Component<Props, State> {
         {x: 0, y: 0},
         {x: 250, y: 250}
       ],
-      currentDraggableComponent: null
+      currentDraggableComponent: null,
+      referenceCoordinates: {x: 0, y: 0}
     }
   }
 
   componentDidMount() {
     document.addEventListener("mouseup", this.clearSelectedComponent);
+    document.addEventListener("mousemove", this.updateDraggedComponent);
   }
 
   /*
@@ -69,13 +72,57 @@ class App extends React.Component<Props, State> {
   setDraggable = (id: string): void => {
     const element: any = document.getElementById(id);
 
-    // When we press down on a draggable element, that element is set as the current draggable component
-    element.onmousedown = () => {
+    // When we press down on a draggable element, that element is set as the current draggable component and take that point as our reference 
+    element.onmousedown = (event: any) => {
       this.setState({
-        currentDraggableComponent: element
+        currentDraggableComponent: element,
+        referenceCoordinates: {x: event.pageX, y: event.pageY }
       });
+
     }
   }
+
+  /*
+  * Function that changes the position of an element as it is dragged
+  */
+ updateDraggedComponent = (event: any): void => {
+
+  if(this.state.currentDraggableComponent === null) {
+    return;
+  } 
+
+  // Grab the numeric id of our current draggable component so we can update its location
+  const coordinateId = this.state.currentDraggableComponent.id.slice(-1);
+
+  // Current position of our mouse cursor
+  const mouseX = event.pageX; 
+  const mouseY = event.pageY;
+
+  // Current location of our component
+  const currentX = this.state.coordinates[coordinateId].x;
+  const currentY = this.state.coordinates[coordinateId].y;
+
+  // Grab the current location of our mouse cursor and get the difference
+  const deltaX: number = mouseX - this.state.referenceCoordinates.x;
+  const deltaY: number = mouseY - this.state.referenceCoordinates.y;
+
+  // Set the new location
+  const newCoordinates = {
+    x: currentX + deltaX,
+    y: currentY + deltaY
+  };
+
+  let updatedCoordinates = this.state.coordinates;
+  updatedCoordinates[coordinateId] = newCoordinates;
+
+  // Set the new location and update the reference to where our mouse is
+  this.setState({
+    coordinates: updatedCoordinates,
+    referenceCoordinates: {x: mouseX, y: mouseY}
+  });
+
+
+ }
   
   render() {
 
