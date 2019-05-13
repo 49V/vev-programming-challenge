@@ -10,6 +10,7 @@ export interface Props {
 export interface State {
   // Create an array of objects for holding our coordinates
   coordinates: { x: number, y: number} [];
+  currentDraggableComponent: any;
 }
 
 class App extends React.Component<Props, State> {
@@ -23,8 +24,13 @@ class App extends React.Component<Props, State> {
       coordinates : [ 
         {x: 0, y: 0},
         {x: 250, y: 250}
-      ]
+      ],
+      currentDraggableComponent: null
     }
+  }
+
+  componentDidMount() {
+    document.addEventListener("mouseup", this.clearSelectedComponent);
   }
 
   /*
@@ -48,17 +54,39 @@ class App extends React.Component<Props, State> {
     return;
   }
 
+  /*
+  * Function that sets the state of currentDraggableComponent to null when the left mouse button is released
+  */
+  clearSelectedComponent = () : void => {
+    this.setState({
+      currentDraggableComponent: null
+    });
+  }
+
+   /*
+  * Function that sets an element with a given ID to be draggable
+  */
+  draggable = (id: string): void => {
+    const element: any = document.getElementById(id);
+
+    // When we press down on a draggable element, that element is set as the current draggable component
+    element.onmousedown = () => {
+      this.setState({
+        currentDraggableComponent: element
+      });
+    }
+  }
+  
   render() {
 
     const circles = this.state.coordinates.map( (coordinate, index) => {
       return(
-        <Circle changeCircleCoordinates={this.changeCircleCoordinates} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
+        <Circle changeCircleCoordinates={this.changeCircleCoordinates} draggable={this.draggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
       );
     });
 
     return(
-      <React.Fragment>
-        
+      <>
         {circles}
 
         <section className="problem">
@@ -69,9 +97,7 @@ class App extends React.Component<Props, State> {
           It should be possible to drag the circles, and the line should be drawn between the circles. The input fields shows the position of the circles and the length of the line, all the inputs should be possible to edit, and the related ui should update.
           </article>
         </section>
-
-      </React.Fragment>
-
+      </>
     );
   }
 }

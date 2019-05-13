@@ -2,6 +2,7 @@ import * as React from "react";
 
 export interface IProps {
   changeCircleCoordinates: any;
+  draggable: any;
   id: number;
   x: number;
   y: number;
@@ -12,6 +13,11 @@ export interface IState {
 }
 
 class Circle extends React.Component<IProps, IState> {
+
+  componentDidMount() {
+    // Set the circle to be draggable when it renders
+    this.props.draggable("circle-" + this.props.id);
+  }
 
   updatePosition = (event: any): void => {
     
@@ -47,7 +53,7 @@ class Circle extends React.Component<IProps, IState> {
 
   render() {
     return(
-      <div className="circle" style={{left: this.props.x + 'px', top: this.props.y + 'px'}}>
+      <div className="circle" id={`circle-${this.props.id}`} style={{left: this.props.x + 'px', top: this.props.y + 'px'}}>
         <span className="text">
           <form onChange={this.updatePosition}>
             <label>
