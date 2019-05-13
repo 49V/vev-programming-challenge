@@ -35,6 +35,26 @@
   stroke-width: 2;
 }
 
+.line-settings {
+  position: absolute;
+  background:#001733;
+  border: none;
+  border-radius: 10px;
+  color: #f5efed;
+  margin: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.line-settings input {
+  background: transparent;
+  border: none;
+  color: #f5efed;
+  text-align: center;
+  width: 40px;
+  z-index: 100;
+}
+
 .problem {
   background: #001733;
   color: #f5efed;
