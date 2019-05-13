@@ -9,10 +9,23 @@
   align-items: center;
   border-radius: 50%;
   background: #ff705a;
-  color: #f5efed;
+  color: black;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: absolute;
+}
+.circle label {
+  display: block;
+}
+.circle label input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #001733;
+  color: black;
+  margin: 8px;
+  text-align: center;
+  width: 60px;
 }
 
 .problem {

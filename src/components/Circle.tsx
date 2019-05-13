@@ -1,65 +1,64 @@
 import * as React from "react";
 
 export interface IProps {
-
+  changeCircleCoordinates: any;
+  id: number;
+  x: number;
+  y: number;
 }
 
 export interface IState {
-  coordinates: {
-    x: number;
-    y: number;
-  }
+
 }
 
 class Circle extends React.Component<IProps, IState> {
 
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      coordinates: {
-        x: 0,
-        y: 0
+  updatePosition = (event: any): void => {
+    
+    event.preventDefault();
+    let newCoordinates;
+
+    if(this.isNumeric(event.target.value)) {
+      if(event.target.id === 'x') {
+        // Case 1: We update x
+        const newX = event.target.value;
+        newCoordinates = {
+          x: newX,
+          y: this.props.y
+        }
+
+      } else if(event.target.id === 'y') {
+        // Case 2: We update y
+        const newY = event.target.value;
+        newCoordinates = {
+          x: this.props.x,
+          y: newY
+        }
       }
-    };
-  } 
-
-  componentDidMount() {
-    this.setState(this.getCoordinates());
+      this.props.changeCircleCoordinates(newCoordinates, this.props.id);
+    } 
+    return;
   }
-  
-  getCoordinates = (): IState => {
-    // Grab the circle element from the DOM
-    const circle: any = document.querySelector(".circle");
 
-    // Get the x and y coordinates relative to the top left of the window
-    const {x, y} = circle.getBoundingClientRect();
-
-    // Populate our coordinates object and round down to nearest number
-    // Additionally, we need to set the coordinates relative to the document so that it doesn't change as we scroll
-    const coordinates: IState = { 
-      coordinates: 
-        {
-          x: Math.floor(x + window.pageXOffset), 
-          y: Math.floor(y + window.pageYOffset)
-        } 
-      };
-
-    return coordinates;
+  // Returns true if the value is numeric, otherwise false
+  isNumeric = (value: any): boolean => {
+    return !isNaN(value);
   }
 
   render() {
     return(
-      <div className="circle">
+      <div className="circle" style={{left: this.props.x + 'px', top: this.props.y + 'px'}}>
         <span className="text">
-          <div>
-            X : {this.state.coordinates.x}
-          </div>
-          <div>
-            Y : {this.state.coordinates.y}
-          </div>
+          <form onChange={this.updatePosition}>
+            <label>
+              X : <input id="x" type="number" name="x" defaultValue={`${this.props.x}`} />
+            </label>
+            <label>
+              Y : <input id="y" type="number" name="y" defaultValue={`${this.props.y}`} />
+            </label>
+          </form>
         </span>
       </div>
-
     );
   }
 

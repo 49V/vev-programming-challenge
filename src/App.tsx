@@ -8,16 +8,59 @@ export interface Props {
 }
 
 export interface State {
-
+  // Create an array of objects for holding our coordinates
+  coordinates: { x: number, y: number} [];
 }
 
 class App extends React.Component<Props, State> {
 
+  constructor(props: any) {
+    super(props);
+
+    // Initialize our circle positions
+    this.state = 
+    {
+      coordinates : [ 
+        {x: 0, y: 0},
+        {x: 250, y: 250}
+      ]
+    }
+  }
+
+  /*
+  * Function that changes the coordinates of a given circle if it exists, otherwise does nothing
+  */
+  changeCircleCoordinates = (newCoordinates: {x: number, y: number}, id: number ): void => {
+
+    // First make sure that the circle exists
+    if(this.state.coordinates[id]) {
+      // Transform our old coordinates
+      let updatedCoordinates = this.state.coordinates;
+      
+      // Add the newCoordinates entry
+      updatedCoordinates[id] = newCoordinates;
+      
+      this.setState({
+        coordinates: updatedCoordinates
+      });
+    }
+
+    return;
+  }
+
   render() {
+
+    const circles = this.state.coordinates.map( (coordinate, index) => {
+      return(
+        <Circle changeCircleCoordinates={this.changeCircleCoordinates} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
+      );
+    });
+
     return(
       <React.Fragment>
+        
+        {circles}
 
-        <Circle />
         <section className="problem">
           <h1>
             Problem description
