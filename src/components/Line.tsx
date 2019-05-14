@@ -9,6 +9,7 @@ export interface IProps {
   id: number;
   inputPosition: { left: string, top: string}
   length: number;
+  theta: number;
 }
 
 function Line (props: IProps) {
@@ -21,12 +22,9 @@ function Line (props: IProps) {
   const updatePosition = (event: any): void => {
 
     // Take the input and convert it to a Float
-    const xLength = props.coordinates[SECOND].x - props.coordinates[FIRST].x;
-    const yLength = props.coordinates[SECOND].y - props.coordinates[FIRST].y;
-    const theta = props.getPolarCoordinates(xLength, yLength).theta;
     const newLengthInput = parseFloat(event.target.value);
     
-    props.changeLineLength(newLengthInput, props.id, theta);
+    props.changeLineLength(newLengthInput, props.id, props.theta);
   }
 
   return (
