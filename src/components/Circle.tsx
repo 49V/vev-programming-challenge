@@ -58,10 +58,10 @@ class Circle extends React.Component<IProps, IState> {
       <div className="circle" id={`circle-${this.props.id}`} style={{left: this.props.x + 'px', top: this.props.y + 'px'}}>
         <span className="text">
             <label>
-              X : <input id="x" type="number" name="x" onChange={this.updatePosition} value={`${this.props.x}`} />
+              X : <input id="x" type="number" name="x" onChange={this.updatePosition} value={`${Math.floor(this.props.x)}`} />
             </label>
             <label>
-              Y : <input id="y" type="number" name="y" onChange={this.updatePosition} value={`${this.props.y}`} />
+              Y : <input id="y" type="number" name="y" onChange={this.updatePosition} value={`${Math.floor(this.props.y)}`} />
             </label>
         </span>
       </div>

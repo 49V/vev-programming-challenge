@@ -69,8 +69,25 @@ class App extends React.Component<Props, State> {
   /*
   * Changes the length of a given line, and updates coordinates accordingly
   */
-  changeLineLength = (newLineLength: number, lineId: number) : void => {
+  changeLineLength = (newLineLength: number, lineId: number, theta: number) : void => {
 
+    // Our theta remain the same, but our line length changes. Get the appropriate cartesian coordinates
+    const { x, y } = this.convertPolarToCartesian(newLineLength, theta);
+
+    // We then change the relevant coordinates (our lineId tells us the circle that it is linked to)
+    let updatedCoordinates = this.state.coordinates;
+
+    // We have a pair of circles which are connected by a line. We use the first circle as the reference
+    let referenceCoordinates = this.state.coordinates[lineId];
+    // And we offset the second circle based upon the length of the line
+    let newCoordinates = {x: referenceCoordinates.x + x, y: referenceCoordinates.y + y};
+
+    // We use the first circle as the reference, therefore we change the next circle's coordinates as length changes
+    updatedCoordinates[lineId + 1] = newCoordinates;
+
+    this.setState({
+      coordinates: updatedCoordinates
+    });
   }
 
   /*
@@ -89,7 +106,7 @@ class App extends React.Component<Props, State> {
   getPolarCoordinates = (xLength: number, yLength: number): { r: number, theta: number } => {
 
     // This is just pythagorous
-    const r: number = Math.floor(Math.sqrt((xLength ** 2) + (yLength ** 2) ));
+    const r: number = (Math.sqrt((xLength ** 2) + (yLength ** 2) ));
     const theta: number = Math.atan2(yLength, xLength);
 
     return { r, theta };
@@ -182,7 +199,7 @@ class App extends React.Component<Props, State> {
       // For every line, we have a pair of coordinates (the two circles that the line links)
       const coordinates = [ this.state.coordinates[index], this.state.coordinates[index + 1] ];
 
-      lines[index] = <Line key={index} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} />
+      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} />
     }
 
     return(

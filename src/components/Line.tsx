@@ -1,6 +1,7 @@
 import * as React from "react";
 
 export interface IProps {
+  changeLineLength: any;
   circleRadius: number;
   coordinates: { x: number, y: number} [];
   convertPolarToCartesian: any;
@@ -11,10 +12,6 @@ export interface IProps {
 export interface IState {
 
 }
-
-// Is I should create a state component in the parent that keeps track of line coordinates
-  // {r: , theta:, id: this can be linked to the parent}
-  //  That way, we could have multiple circles and multiple lines and the code would still work
 
 class Line extends React.Component<IProps, IState> {
 
@@ -43,6 +40,17 @@ class Line extends React.Component<IProps, IState> {
     return { left, top }
   }
 
+  updatePosition = (event: any): void => {
+
+    // Take the input and convert it to a Float
+    const xLength = this.props.coordinates[1].x - this.props.coordinates[0].x;
+    const yLength = this.props.coordinates[1].y - this.props.coordinates[0].y;
+    const theta = this.props.getPolarCoordinates(xLength, yLength).theta;
+    const newLengthInput = parseFloat(event.target.value);
+    
+    this.props.changeLineLength(newLengthInput, this.props.id, theta);
+  }
+
   render() {
 
     const xLength = this.props.coordinates[1].x - this.props.coordinates[0].x;
@@ -58,7 +66,7 @@ class Line extends React.Component<IProps, IState> {
       </svg>
       <div className="line-settings" style={this.calculateInputPosition()} >
         <label>
-          <input id="length" type="number" name="length" value={`${this.props.getPolarCoordinates(xLength, yLength).r}`}/>
+          <input id="length" type="number" name="length" onChange={this.updatePosition} value={`${this.props.getPolarCoordinates(xLength, yLength).r}`}/>
         </label>
       </div>
     </React.Fragment>
