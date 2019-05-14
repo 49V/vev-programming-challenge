@@ -66,7 +66,34 @@ class App extends React.Component<Props, State> {
   // -------------------------------------------------------------------------------------------
   // 
 
-  //  GENERAL FUNCTIONS
+  /*
+  * Changes the length of a given line, and updates coordinates accordingly
+  */
+
+
+  /*
+  * Converts Polar Coordinates (r, theta) to Cartesian Coordinates (x, y)
+  */
+  convertPolarToCartesian = (r: number, theta: number) : { x: number, y: number } => {
+    const x: number = r * Math.cos(theta);
+    const y: number = r * Math.sin(theta);
+
+    return { x, y };
+  }
+
+  /*
+  * Gets the polar coordinates of a given an xLength (width) and yLength(height)
+  */
+  getPolarCoordinates = (xLength: number, yLength: number): { r: number, theta: number } => {
+
+    // This is just pythagorous
+    const r: number = Math.floor(Math.sqrt((xLength ** 2) + (yLength ** 2) ));
+    const theta: number = Math.atan2(yLength, xLength);
+
+    return { r, theta };
+  }
+
+  //  DRAG FUNCTIONS
   // -------------------------------------------------------------------------------------------
   // 
 
@@ -149,7 +176,7 @@ class App extends React.Component<Props, State> {
     return(
       <>
         {circles}
-        <Line circleRadius={this.props.circleRadius} coordinates={this.state.coordinates} />
+        <Line circleRadius={this.props.circleRadius} coordinates={this.state.coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} />
         <section className="problem">
           <h1>
             Problem description

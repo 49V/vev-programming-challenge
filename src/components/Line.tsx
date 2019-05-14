@@ -3,11 +3,17 @@ import * as React from "react";
 export interface IProps {
   circleRadius: number;
   coordinates: { x: number, y: number} [];
+  getPolarCoordinates: any;
+  convertPolarToCartesian: any;
 }
 
 export interface IState {
 
 }
+
+// Is I should create a state component in the parent that keeps track of line coordinates
+  // {r: , theta:, id: this can be linked to the parent}
+  //  That way, we could have multiple circles and multiple lines and the code would still work
 
 class Line extends React.Component<IProps, IState> {
 
@@ -20,10 +26,10 @@ class Line extends React.Component<IProps, IState> {
     const yLength = this.props.coordinates[1].y - this.props.coordinates[0].y;
 
     // We use the first circle as our reference and get the length first in it's polar form
-    const { r, theta } = this.getPolarCoordinates(xLength, yLength);
+    const { r, theta } = this.props.getPolarCoordinates(xLength, yLength);
 
     // Then we convert it into cartesian coordinates such that we can place our input box relative to our first circle
-    const { x, y } = this.convertPolarToCartesian(r, theta);
+    const { x, y } = this.props.convertPolarToCartesian(r, theta);
 
     // Remember that our box is directly between our two circles (Hence we divide by two to get our offset relative to the first circle)
     const xOffset = x / 2;
@@ -35,29 +41,6 @@ class Line extends React.Component<IProps, IState> {
 
     return { left, top }
   }
-
-  /*
-  * Gets the polar coordinates of a given an xLength (width) and yLength(height)
-  */
-  getPolarCoordinates = (xLength: number, yLength: number): { r: number, theta: number } => {
-
-    // This is just pythagorous
-    const r: number = Math.floor(Math.sqrt((xLength ** 2) + (yLength ** 2) ));
-    const theta: number = Math.atan2(yLength, xLength);
-
-    return { r, theta };
-  }
-
-  /*
-  * Converts Polar Coordinates (r, theta) to Cartesian Coordinates (x, y)
-  */
- convertPolarToCartesian = (r: number, theta: number) : { x: number, y: number } => {
-    const x: number = r * Math.cos(theta);
-    const y: number = r * Math.sin(theta);
-
-    return { x, y };
- }
-
 
   render() {
 
@@ -74,7 +57,7 @@ class Line extends React.Component<IProps, IState> {
       </svg>
       <div className="line-settings" style={this.calculateInputPosition()} >
         <label>
-          <input id="length" type="number" name="length" value={`${this.getPolarCoordinates(xLength, yLength).r}`}/>
+          <input id="length" type="number" name="length" value={`${this.props.getPolarCoordinates(xLength, yLength).r}`}/>
         </label>
       </div>
     </React.Fragment>
