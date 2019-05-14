@@ -13,11 +13,16 @@ export interface IProps {
 
 function Line (props: IProps) {
 
+  const FIRST = 0;
+  const SECOND = 1;
+  const LINE_HEIGHT = 200;
+  const LINE_WIDTH = 200;
+
   const updatePosition = (event: any): void => {
 
     // Take the input and convert it to a Float
-    const xLength = props.coordinates[1].x - props.coordinates[0].x;
-    const yLength = props.coordinates[1].y - props.coordinates[0].y;
+    const xLength = props.coordinates[SECOND].x - props.coordinates[FIRST].x;
+    const yLength = props.coordinates[SECOND].y - props.coordinates[FIRST].y;
     const theta = props.getPolarCoordinates(xLength, yLength).theta;
     const newLengthInput = parseFloat(event.target.value);
     
@@ -26,10 +31,10 @@ function Line (props: IProps) {
 
   return (
     <React.Fragment>
-    <svg className="line" style={{ width: 200 + 'px', height: 200 + 'px'} }>
+    <svg className="line" style={{ width: LINE_WIDTH + 'px', height: LINE_HEIGHT + 'px'} }>
       <line 
-      x1={props.coordinates[0].x + props.circleRadius * 2} y1={props.coordinates[0].y + props.circleRadius * 2} 
-      x2={props.coordinates[1].x + props.circleRadius * 2} y2={props.coordinates[1].y + props.circleRadius * 2} 
+      x1={props.coordinates[FIRST].x + props.circleRadius * 2} y1={props.coordinates[FIRST].y + props.circleRadius * 2} 
+      x2={props.coordinates[SECOND].x + props.circleRadius * 2} y2={props.coordinates[SECOND].y + props.circleRadius * 2} 
       />
     </svg>
     <div className="line-settings" style={props.inputPosition} >
