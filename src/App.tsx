@@ -10,7 +10,7 @@ export interface Props {
 
 export interface State {
   // Create an array of objects for holding our coordinates
-  coordinates: { x: number, y: number} [];
+  circleCoordinates: { x: number, y: number} [];
   currentDraggableComponent: any;
   referenceCoordinates: {x: number, y: number};
 }
@@ -23,7 +23,7 @@ class App extends React.Component<Props, State> {
     // Initialize our circle positions
     this.state = 
     {
-      coordinates : [ 
+      circleCoordinates : [ 
         {x: 0, y: 0},
         {x: 250, y: 250},
       ],
@@ -47,15 +47,15 @@ class App extends React.Component<Props, State> {
   changeCircleCoordinates = (newCoordinates: {x: number, y: number}, id: number ): void => {
 
     // First make sure that the circle exists
-    if(this.state.coordinates[id]) {
+    if(this.state.circleCoordinates[id]) {
       // Transform our old coordinates
-      let updatedCoordinates = this.state.coordinates;
+      let updatedCoordinates = this.state.circleCoordinates;
       
       // Add the newCoordinates entry
       updatedCoordinates[id] = newCoordinates;
       
       this.setState({
-        coordinates: updatedCoordinates
+        circleCoordinates: updatedCoordinates
       });
     }
 
@@ -71,8 +71,8 @@ class App extends React.Component<Props, State> {
   */
  calculateInputPosition = (lineId: number): { left: string, top: string } => {
 
-  const xLength = this.state.coordinates[lineId + 1].x - this.state.coordinates[lineId].x;
-  const yLength = this.state.coordinates[lineId + 1].y - this.state.coordinates[lineId].y;
+  const xLength = this.state.circleCoordinates[lineId + 1].x - this.state.circleCoordinates[lineId].x;
+  const yLength = this.state.circleCoordinates[lineId + 1].y - this.state.circleCoordinates[lineId].y;
 
   // We use the first circle as our reference and get the length first in it's polar form
   const { r, theta } = this.getPolarCoordinates(xLength, yLength);
@@ -85,8 +85,8 @@ class App extends React.Component<Props, State> {
   const yOffset = y / 2;
 
   // Our input box should be put between both of our circles
-  const left: string =  ((this.state.coordinates[lineId].x + xOffset)).toString() + 'px';
-  const top: string =   ((this.state.coordinates[lineId].y + yOffset + 50)).toString() + 'px'; 
+  const left: string =  ((this.state.circleCoordinates[lineId].x + xOffset)).toString() + 'px';
+  const top: string =   ((this.state.circleCoordinates[lineId].y + yOffset + 50)).toString() + 'px'; 
 
   return { left, top }
 }
@@ -100,10 +100,10 @@ class App extends React.Component<Props, State> {
     const { x, y } = this.convertPolarToCartesian(newLineLength, theta);
 
     // We then change the relevant coordinates (our lineId tells us the circle that it is linked to)
-    let updatedCoordinates = this.state.coordinates;
+    let updatedCoordinates = this.state.circleCoordinates;
 
     // We have a pair of circles which are connected by a line. We use the first circle as the reference
-    let referenceCoordinates = this.state.coordinates[lineId];
+    let referenceCoordinates = this.state.circleCoordinates[lineId];
     // And we offset the second circle based upon the length of the line
     let newCoordinates = {x: referenceCoordinates.x + x, y: referenceCoordinates.y + y};
 
@@ -111,7 +111,7 @@ class App extends React.Component<Props, State> {
     updatedCoordinates[lineId + 1] = newCoordinates;
 
     this.setState({
-      coordinates: updatedCoordinates
+      circleCoordinates: updatedCoordinates
     });
   }
 
@@ -184,8 +184,8 @@ class App extends React.Component<Props, State> {
   const mouseY = event.pageY;
 
   // Current location of our component
-  const currentX = this.state.coordinates[coordinateId].x;
-  const currentY = this.state.coordinates[coordinateId].y;
+  const currentX = this.state.circleCoordinates[coordinateId].x;
+  const currentY = this.state.circleCoordinates[coordinateId].y;
 
   // Grab the current location of our mouse cursor and get the difference
   const deltaX: number = mouseX - this.state.referenceCoordinates.x;
@@ -197,12 +197,12 @@ class App extends React.Component<Props, State> {
     y: currentY + deltaY
   };
 
-  let updatedCoordinates = this.state.coordinates;
+  let updatedCoordinates = this.state.circleCoordinates;
   updatedCoordinates[coordinateId] = newCoordinates;
 
   // Set the new location and update the reference to where our mouse is
   this.setState({
-    coordinates: updatedCoordinates,
+    circleCoordinates: updatedCoordinates,
     referenceCoordinates: {x: mouseX, y: mouseY}
   });
 
@@ -210,7 +210,7 @@ class App extends React.Component<Props, State> {
  }
   
   render() {
-    const circles = this.state.coordinates.map( (coordinate, index) => {
+    const circles = this.state.circleCoordinates.map( (coordinate, index) => {
       return(
         <Circle changeCircleCoordinates={this.changeCircleCoordinates} setDraggable={this.setDraggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
       );
@@ -218,15 +218,15 @@ class App extends React.Component<Props, State> {
 
     let lines: any = [];
     // For N circles we have N - 1 lines
-    for(let index = 0; index < this.state.coordinates.length - 1; index++) {
+    for(let index = 0; index < this.state.circleCoordinates.length - 1; index++) {
       // For every line, we have a pair of coordinates (the two circles that the line links)
-      const coordinates = [ this.state.coordinates[index], this.state.coordinates[index + 1] ];
-      const xLength = this.state.coordinates[index + 1].x - this.state.coordinates[index].x;
-      const yLength = this.state.coordinates[index + 1].y - this.state.coordinates[index].y;
+      const circleCoordinates = [ this.state.circleCoordinates[index], this.state.circleCoordinates[index + 1] ];
+      const xLength = this.state.circleCoordinates[index + 1].x - this.state.circleCoordinates[index].x;
+      const yLength = this.state.circleCoordinates[index + 1].y - this.state.circleCoordinates[index].y;
 
       const {r, theta} = this.getPolarCoordinates(xLength, yLength);
 
-      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} id={index} inputPosition={this.calculateInputPosition(index)} length={r} theta={theta} />
+      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={circleCoordinates} id={index} inputPosition={this.calculateInputPosition(index)} length={r} theta={theta} />
     }
 
     return(
