@@ -15,6 +15,9 @@ export interface State {
   draggingReferenceCoordinates: {x: number, y: number};
 }
 
+const X_PADDING_WIDTH_OFFSET = 30;
+const Y_PADDING_WIDTH_OFFSET = 50;
+
 class App extends React.Component<Props, State> {
 
   constructor(props: any) {
@@ -44,7 +47,7 @@ class App extends React.Component<Props, State> {
   /*
   * Function that changes the coordinates of a given circle if it exists, otherwise does nothing
   */
-  changeCircleCoordinates = (newCoordinates: {x: number, y: number}, id: number ): void => {
+  changeCircleCoordinates = (newCoordinates: { x: number, y: number }, id: number ): void => {
 
     // First make sure that the circle exists
     if(this.state.circleCoordinates[id]) {
@@ -69,27 +72,22 @@ class App extends React.Component<Props, State> {
   /*
   * Calculates the position of the input box on the line component from the given props
   */
- calculateInputPosition = (lineId: number): { left: string, top: string } => {
+  calculateInputPosition = (lineId: number): { left: string, top: string } => {
 
-  const xLength = this.state.circleCoordinates[lineId + 1].x - this.state.circleCoordinates[lineId].x;
-  const yLength = this.state.circleCoordinates[lineId + 1].y - this.state.circleCoordinates[lineId].y;
+    const xLength = this.state.circleCoordinates[lineId + 1].x - this.state.circleCoordinates[lineId].x;
+    const yLength = this.state.circleCoordinates[lineId + 1].y - this.state.circleCoordinates[lineId].y;
 
-  // We use the first circle as our reference and get the length first in it's polar form
-  const { r, theta } = this.getPolarCoordinates(xLength, yLength);
+    // We use the first circle as our reference and get the length first in it's polar form
+    const { r, theta } = this.getPolarCoordinates(xLength, yLength);
 
-  // Then we convert it into cartesian coordinates such that we can place our input box relative to our first circle
-  const { x, y } = this.convertPolarToCartesian(r, theta);
+    // Then we convert it into cartesian coordinates such that we can place our input box relative to our first circle. Remember that it is between the two circles so we divide r by 2.
+    const { x, y } = this.convertPolarToCartesian(r / 2, theta);
 
-  // Remember that our box is directly between our two circles (Hence we divide by two to get our offset relative to the first circle)
-  const xOffset = x / 2;
-  const yOffset = y / 2;
+    const left: string =  ((this.state.circleCoordinates[lineId].x + x + X_PADDING_WIDTH_OFFSET)).toString() + 'px';
+    const top: string =   ((this.state.circleCoordinates[lineId].y + y + Y_PADDING_WIDTH_OFFSET)).toString() + 'px'; 
 
-  // Our input box should be put between both of our circles
-  const left: string =  ((this.state.circleCoordinates[lineId].x + xOffset)).toString() + 'px';
-  const top: string =   ((this.state.circleCoordinates[lineId].y + yOffset + 50)).toString() + 'px'; 
-
-  return { left, top }
-}
+    return { left, top }
+  }
 
   /*
   * Changes the length of a given line, and updates coordinates accordingly
@@ -104,6 +102,7 @@ class App extends React.Component<Props, State> {
 
     // We have a pair of circles which are connected by a line. We use the first circle as the reference
     let referenceCoordinates = this.state.circleCoordinates[lineId];
+
     // And we offset the second circle based upon the length of the line
     let newCoordinates = {x: referenceCoordinates.x + x, y: referenceCoordinates.y + y};
 
@@ -187,7 +186,7 @@ class App extends React.Component<Props, State> {
   const currentX = this.state.circleCoordinates[coordinateId].x;
   const currentY = this.state.circleCoordinates[coordinateId].y;
 
-  // Grab the current location of our mouse cursor and get the difference
+  // Grab the current location of our mouse cursor and get the difference from our reference
   const deltaX: number = mouseX - this.state.draggingReferenceCoordinates.x;
   const deltaY: number = mouseY - this.state.draggingReferenceCoordinates.y;
 
@@ -196,7 +195,6 @@ class App extends React.Component<Props, State> {
     x: currentX + deltaX,
     y: currentY + deltaY
   };
-
   let updatedCoordinates = this.state.circleCoordinates;
   updatedCoordinates[coordinateId] = newCoordinates;
 
@@ -205,8 +203,6 @@ class App extends React.Component<Props, State> {
     circleCoordinates: updatedCoordinates,
     draggingReferenceCoordinates: {x: mouseX, y: mouseY}
   });
-
-
  }
   
   render() {
