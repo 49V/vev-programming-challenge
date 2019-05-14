@@ -1,8 +1,19 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Getting Started
+
+### 1) Fork the repository
+
+### 2) Clone the repository
+`git clone ...`
+
+### 3) Install dependencies 
+`npm install`
+
+### 4) Try it out in development mode 
+`npm start`
 
 ## Available Scripts
 
-As is standard in any Create React App, App, you can run all the commands below. For the sake of evaluation. it's best just to run 'npm start' and play around in development mode.
+As is standard in any Create React App, App, you can run all the commands below. For the sake of evaluation. it's best just to run 'npm start' and play around in development mode. 
 
 ### `npm start`
 
