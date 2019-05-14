@@ -226,7 +226,7 @@ class App extends React.Component<Props, State> {
 
       const {r, theta} = this.getPolarCoordinates(xLength, yLength);
 
-      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} inputPosition={this.calculateInputPosition(index)} length={r} theta={theta} />
+      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} id={index} inputPosition={this.calculateInputPosition(index)} length={r} theta={theta} />
     }
 
     return(

@@ -4,8 +4,6 @@ export interface IProps {
   changeLineLength: any;
   circleRadius: number;
   coordinates: { x: number, y: number} [];
-  convertPolarToCartesian: any;
-  getPolarCoordinates: any;
   id: number;
   inputPosition: { left: string, top: string}
   length: number;
@@ -29,17 +27,20 @@ function Line (props: IProps) {
 
   return (
     <React.Fragment>
-    <svg className="line" style={{ width: LINE_WIDTH + 'px', height: LINE_HEIGHT + 'px'} }>
-      <line 
-      x1={props.coordinates[FIRST].x + props.circleRadius * 2} y1={props.coordinates[FIRST].y + props.circleRadius * 2} 
-      x2={props.coordinates[SECOND].x + props.circleRadius * 2} y2={props.coordinates[SECOND].y + props.circleRadius * 2} 
-      />
-    </svg>
-    <div className="line-settings" style={props.inputPosition} >
-      <label>
-        <input id="length" type="number" name="length" onChange={updatePosition} value={`${props.length}`}/>
-      </label>
-    </div>
+
+      <svg className="line" style={{ width: LINE_WIDTH + 'px', height: LINE_HEIGHT + 'px'} }>
+        <line 
+        x1={props.coordinates[FIRST].x + props.circleRadius * 2} y1={props.coordinates[FIRST].y + props.circleRadius * 2} 
+        x2={props.coordinates[SECOND].x + props.circleRadius * 2} y2={props.coordinates[SECOND].y + props.circleRadius * 2} 
+        />
+      </svg>
+
+      <div className="line-settings" style={props.inputPosition} >
+        <label>
+          <input id="length" type="number" name="length" onChange={updatePosition} value={`${props.length}`}/>
+        </label>
+      </div>
+
   </React.Fragment>
   );
 
