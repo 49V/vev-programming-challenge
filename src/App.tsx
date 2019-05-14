@@ -212,7 +212,7 @@ class App extends React.Component<Props, State> {
   render() {
     const circles = this.state.coordinates.map( (coordinate, index) => {
       return(
-        <Circle changeCircleCoordinates={this.changeCircleCoordinates} draggable={this.setDraggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
+        <Circle changeCircleCoordinates={this.changeCircleCoordinates} setDraggable={this.setDraggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
       );
     });
 
