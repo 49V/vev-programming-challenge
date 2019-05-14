@@ -8,6 +8,7 @@ export interface IProps {
   getPolarCoordinates: any;
   id: number;
   inputPosition: { left: string, top: string}
+  length: number;
 }
 
 export interface IState {
@@ -29,9 +30,6 @@ class Line extends React.Component<IProps, IState> {
 
   render() {
 
-    const xLength = this.props.coordinates[1].x - this.props.coordinates[0].x;
-    const yLength = this.props.coordinates[1].y - this.props.coordinates[0].y;
-
     return (
       <React.Fragment>
       <svg className="line" style={{ width: 200 + 'px', height: 200 + 'px'} }>
@@ -42,7 +40,7 @@ class Line extends React.Component<IProps, IState> {
       </svg>
       <div className="line-settings" style={this.props.inputPosition} >
         <label>
-          <input id="length" type="number" name="length" onChange={this.updatePosition} value={`${this.props.getPolarCoordinates(xLength, yLength).r}`}/>
+          <input id="length" type="number" name="length" onChange={this.updatePosition} value={`${this.props.length}`}/>
         </label>
       </div>
     </React.Fragment>

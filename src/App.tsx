@@ -210,8 +210,6 @@ class App extends React.Component<Props, State> {
  }
   
   render() {
-
-
     const circles = this.state.coordinates.map( (coordinate, index) => {
       return(
         <Circle changeCircleCoordinates={this.changeCircleCoordinates} draggable={this.setDraggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
@@ -223,8 +221,10 @@ class App extends React.Component<Props, State> {
     for(let index = 0; index < this.state.coordinates.length - 1; index++) {
       // For every line, we have a pair of coordinates (the two circles that the line links)
       const coordinates = [ this.state.coordinates[index], this.state.coordinates[index + 1] ];
+      const xLength = this.state.coordinates[index + 1].x - this.state.coordinates[index].x;
+      const yLength = this.state.coordinates[index + 1].y - this.state.coordinates[index].y;
 
-      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} inputPosition={this.calculateInputPosition(index)} />
+      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} inputPosition={this.calculateInputPosition(index)} length={this.getPolarCoordinates(xLength, yLength).r} />
     }
 
     return(
