@@ -12,7 +12,7 @@ export interface State {
   // Create an array of objects for holding our coordinates
   circleCoordinates: { x: number, y: number} [];
   currentDraggableComponent: any;
-  referenceCoordinates: {x: number, y: number};
+  draggingReferenceCoordinates: {x: number, y: number};
 }
 
 class App extends React.Component<Props, State> {
@@ -28,7 +28,7 @@ class App extends React.Component<Props, State> {
         {x: 250, y: 250},
       ],
       currentDraggableComponent: null,
-      referenceCoordinates: {x: 0, y: 0}
+      draggingReferenceCoordinates: {x: 0, y: 0}
     }
   }
 
@@ -160,7 +160,7 @@ class App extends React.Component<Props, State> {
     element.onmousedown = (event: any) => {
       this.setState({
         currentDraggableComponent: element,
-        referenceCoordinates: {x: event.pageX, y: event.pageY }
+        draggingReferenceCoordinates: {x: event.pageX, y: event.pageY }
       });
 
     }
@@ -188,8 +188,8 @@ class App extends React.Component<Props, State> {
   const currentY = this.state.circleCoordinates[coordinateId].y;
 
   // Grab the current location of our mouse cursor and get the difference
-  const deltaX: number = mouseX - this.state.referenceCoordinates.x;
-  const deltaY: number = mouseY - this.state.referenceCoordinates.y;
+  const deltaX: number = mouseX - this.state.draggingReferenceCoordinates.x;
+  const deltaY: number = mouseY - this.state.draggingReferenceCoordinates.y;
 
   // Set the new location
   const newCoordinates = {
@@ -203,7 +203,7 @@ class App extends React.Component<Props, State> {
   // Set the new location and update the reference to where our mouse is
   this.setState({
     circleCoordinates: updatedCoordinates,
-    referenceCoordinates: {x: mouseX, y: mouseY}
+    draggingReferenceCoordinates: {x: mouseX, y: mouseY}
   });
 
 
