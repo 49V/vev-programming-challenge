@@ -67,6 +67,31 @@ class App extends React.Component<Props, State> {
   // 
 
   /*
+  * Calculates the position of the input box on the line component from the given props
+  */
+ calculateInputPosition = (lineId: number): { left: string, top: string } => {
+
+  const xLength = this.state.coordinates[lineId + 1].x - this.state.coordinates[lineId].x;
+  const yLength = this.state.coordinates[lineId + 1].y - this.state.coordinates[lineId].y;
+
+  // We use the first circle as our reference and get the length first in it's polar form
+  const { r, theta } = this.getPolarCoordinates(xLength, yLength);
+
+  // Then we convert it into cartesian coordinates such that we can place our input box relative to our first circle
+  const { x, y } = this.convertPolarToCartesian(r, theta);
+
+  // Remember that our box is directly between our two circles (Hence we divide by two to get our offset relative to the first circle)
+  const xOffset = x / 2;
+  const yOffset = y / 2;
+
+  // Our input box should be put between both of our circles
+  const left: string =  ((this.state.coordinates[lineId].x + xOffset)).toString() + 'px';
+  const top: string =   ((this.state.coordinates[lineId].y + yOffset + 50)).toString() + 'px'; 
+
+  return { left, top }
+}
+
+  /*
   * Changes the length of a given line, and updates coordinates accordingly
   */
   changeLineLength = (newLineLength: number, lineId: number, theta: number) : void => {
@@ -199,7 +224,7 @@ class App extends React.Component<Props, State> {
       // For every line, we have a pair of coordinates (the two circles that the line links)
       const coordinates = [ this.state.coordinates[index], this.state.coordinates[index + 1] ];
 
-      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} />
+      lines[index] = <Line key={index} changeLineLength={this.changeLineLength} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} inputPosition={this.calculateInputPosition(index)} />
     }
 
     return(
