@@ -37,6 +37,10 @@ class App extends React.Component<Props, State> {
     document.addEventListener("mousemove", this.updateDraggedComponent);
   }
 
+  //  CIRCLE FUNCTIONS
+  // -------------------------------------------------------------------------------------------
+  // 
+
   /*
   * Function that changes the coordinates of a given circle if it exists, otherwise does nothing
   */
@@ -57,6 +61,14 @@ class App extends React.Component<Props, State> {
 
     return;
   }
+
+  //  LINE FUNCTIONS
+  // -------------------------------------------------------------------------------------------
+  // 
+
+  //  GENERAL FUNCTIONS
+  // -------------------------------------------------------------------------------------------
+  // 
 
   /*
   * Sets the state of currentDraggableComponent to null when the left mouse button is released
