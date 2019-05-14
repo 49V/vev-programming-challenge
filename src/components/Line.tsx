@@ -11,41 +11,34 @@ export interface IProps {
   length: number;
 }
 
-export interface IState {
+function Line (props: IProps) {
 
-}
-
-class Line extends React.Component<IProps, IState> {
-
-  updatePosition = (event: any): void => {
+  const updatePosition = (event: any): void => {
 
     // Take the input and convert it to a Float
-    const xLength = this.props.coordinates[1].x - this.props.coordinates[0].x;
-    const yLength = this.props.coordinates[1].y - this.props.coordinates[0].y;
-    const theta = this.props.getPolarCoordinates(xLength, yLength).theta;
+    const xLength = props.coordinates[1].x - props.coordinates[0].x;
+    const yLength = props.coordinates[1].y - props.coordinates[0].y;
+    const theta = props.getPolarCoordinates(xLength, yLength).theta;
     const newLengthInput = parseFloat(event.target.value);
     
-    this.props.changeLineLength(newLengthInput, this.props.id, theta);
+    props.changeLineLength(newLengthInput, props.id, theta);
   }
 
-  render() {
-
-    return (
-      <React.Fragment>
-      <svg className="line" style={{ width: 200 + 'px', height: 200 + 'px'} }>
-        <line 
-        x1={this.props.coordinates[0].x + this.props.circleRadius * 2} y1={this.props.coordinates[0].y + this.props.circleRadius * 2} 
-        x2={this.props.coordinates[1].x + this.props.circleRadius * 2} y2={this.props.coordinates[1].y + this.props.circleRadius * 2} 
-        />
-      </svg>
-      <div className="line-settings" style={this.props.inputPosition} >
-        <label>
-          <input id="length" type="number" name="length" onChange={this.updatePosition} value={`${this.props.length}`}/>
-        </label>
-      </div>
-    </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+    <svg className="line" style={{ width: 200 + 'px', height: 200 + 'px'} }>
+      <line 
+      x1={props.coordinates[0].x + props.circleRadius * 2} y1={props.coordinates[0].y + props.circleRadius * 2} 
+      x2={props.coordinates[1].x + props.circleRadius * 2} y2={props.coordinates[1].y + props.circleRadius * 2} 
+      />
+    </svg>
+    <div className="line-settings" style={props.inputPosition} >
+      <label>
+        <input id="length" type="number" name="length" onChange={updatePosition} value={`${props.length}`}/>
+      </label>
+    </div>
+  </React.Fragment>
+  );
 
 }
 
