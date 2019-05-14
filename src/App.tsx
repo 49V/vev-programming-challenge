@@ -25,7 +25,7 @@ class App extends React.Component<Props, State> {
     {
       coordinates : [ 
         {x: 0, y: 0},
-        {x: 250, y: 250}
+        {x: 250, y: 250},
       ],
       currentDraggableComponent: null,
       referenceCoordinates: {x: 0, y: 0}
@@ -69,7 +69,9 @@ class App extends React.Component<Props, State> {
   /*
   * Changes the length of a given line, and updates coordinates accordingly
   */
+  changeLineLength = (newLineLength: number, lineId: number) : void => {
 
+  }
 
   /*
   * Converts Polar Coordinates (r, theta) to Cartesian Coordinates (x, y)
@@ -167,16 +169,26 @@ class App extends React.Component<Props, State> {
   
   render() {
 
+
     const circles = this.state.coordinates.map( (coordinate, index) => {
       return(
         <Circle changeCircleCoordinates={this.changeCircleCoordinates} draggable={this.setDraggable} id={index} key ={index} x={coordinate.x} y={coordinate.y} />
       );
     });
 
+    let lines: any = [];
+    // For N circles we have N - 1 lines
+    for(let index = 0; index < this.state.coordinates.length - 1; index++) {
+      // For every line, we have a pair of coordinates (the two circles that the line links)
+      const coordinates = [ this.state.coordinates[index], this.state.coordinates[index + 1] ];
+
+      lines[index] = <Line key={index} circleRadius={this.props.circleRadius} coordinates={coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} id={index} />
+    }
+
     return(
       <>
         {circles}
-        <Line circleRadius={this.props.circleRadius} coordinates={this.state.coordinates} convertPolarToCartesian={this.convertPolarToCartesian} getPolarCoordinates={this.getPolarCoordinates} />
+        {lines}
         <section className="problem">
           <h1>
             Problem description

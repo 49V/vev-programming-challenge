@@ -3,8 +3,9 @@ import * as React from "react";
 export interface IProps {
   circleRadius: number;
   coordinates: { x: number, y: number} [];
-  getPolarCoordinates: any;
   convertPolarToCartesian: any;
+  getPolarCoordinates: any;
+  id: number;
 }
 
 export interface IState {
